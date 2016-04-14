@@ -17,7 +17,7 @@ How-To:
   - Click on the "Personal Team" team and click details
   - Click "Create" next to "iOS Development"
   - Download this project and unzip (https://github.com/eni9889/ppsideloader/archive/master.zip)
-  - Inside the new unzipped folder (default called ppsideloader-master) you will find a blank "app.ipa" file. You will need to replace this with a cracked ipa of the app you are trying to tweak.
+  - Inside the new unzipped folder (default called ppsideloader-master) you will find a blank "app.ipa" file. You will need to replace this with a decrypted ipa of the app you are trying to tweak.
   - Find an IPA online of the app you would like to tweak (google something like YouTube IPA download)
   - Once you have downloaded the IPA, rename it so it has the filename "app.ipa"
   - Overwrite the empty "app.ipa" inside the ppsideloader folder with the "app.ipa" file you downloaded earlier.
