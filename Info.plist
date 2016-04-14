@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>f.lux</string>
+	<string>ppsideloader</string>
 	<key>CFBundleExecutable</key>
 	<string>ppsideloader</string>
 	<key>CFBundleIconFiles</key>
@@ -68,7 +68,7 @@
 	<key>MinimumOSVersion</key>
 	<string>7.0</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>f.lux needs to know your location to figure out sunrise and sunset times</string>
+	<string>ppsideloaderneeds to know your location to figure out sunrise and sunset times</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
