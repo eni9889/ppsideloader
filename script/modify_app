@@ -1,0 +1,86 @@
+#export
+
+#define some common paths
+TEMP_PATH="${SRCROOT}/temp"
+WORKING_DIR="${SRCROOT}/working_dir"
+EXTRACTED_IPA_PATH="$TEMP_PATH/EXTRACTED_IPA"
+
+rm -rf "$TEMP_PATH" || true
+rm -rf "$WORKING_DIR" || true
+
+mkdir -p "$TEMP_PATH" || true
+mkdir -p "$WORKING_DIR" || true
+
+#lets extract the IPA
+echo "EXTRACTING IPA"
+unzip -oqq "${SRCROOT}/app.ipa" -d "$EXTRACTED_IPA_PATH"
+
+#find the .app path
+APP_PATH="$(set -- $EXTRACTED_IPA_PATH/Payload/*.app; echo "$1")"
+echo "FOUND APP PATH: $APP_PATH"
+
+#define some common variables
+PP_TWEAK_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib"
+HOOKED_APP_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$APP_PATH/Info.plist")
+
+HOOKED_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName"  "$APP_PATH/Info.plist")
+HOOKED_APP_NAME="$HOOKED_APP_NAME ++"
+
+HOOKED_EXECUTABLE=$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$APP_PATH/Info.plist")
+HOOKED_EXE_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
+
+#lets download the pp tweak for the app located in root
+echo "DOWNLOADING PP TWEAK"
+PP_TWEAK_ZIP_PATH="$TEMP_PATH/pptweak.zip"
+curl -L "https://beta.unlimapps.com/ppsideloaded/$HOOKED_APP_BUNDLE_ID" -o "$PP_TWEAK_ZIP_PATH"
+
+#now we can unzip the tweak into working directory
+echo "EXTRACTING PP TWEAK"
+unzip -oqq "$PP_TWEAK_ZIP_PATH" -d "$WORKING_DIR"
+
+#copy over the app contents
+echo "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
+rm -rf "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"*
+cp -rf "$APP_PATH/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
+
+#copy over all the dylibs
+cp -rf "$WORKING_DIR/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
+
+#change the display name to ++
+/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $HOOKED_APP_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+
+#add the dylib
+"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/pptweak.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
+
+#add the correct entitlements
+TEMP_PLIST="$TEMP_PATH/temp.plist"
+REAL_CODE_SIGN_ENTITLEMENTS="$TEMP_PATH/app.entitlements"
+security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROVISIONING_PROFILE.mobileprovision" -o "$TEMP_PLIST"
+/usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
+
+#sign all the executable binaries
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib"
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib"
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib"
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib"
+
+APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
+if [ -d "$APP_PLUGINS_PATH" ]; then
+    for PLUGIN in "$APP_PLUGINS_PATH/"*.appex
+    do
+        #grab the plugin exe name
+        echo "PLUGIN: $PLUGIN"
+        PLUGIN_EXE=$PLUGIN/$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$PLUGIN/Info.plist")
+        echo "PLUGIN_EXE: $PLUGIN_EXE"
+
+        #sign the extension
+        /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE"
+    done
+fi
+
+#make sure to add entitlements to the original app binary
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" --entitlements "$REAL_CODE_SIGN_ENTITLEMENTS" --timestamp=none "$HOOKED_EXE_PATH"
+
+#cleanup
+rm -rf "$WORKING_DIR" || true
+rm -rf "$TEMP_PATH" || true
