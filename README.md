@@ -6,6 +6,7 @@ Supported Apps/Tweaks:
   - YouTube (YouTube ++)
   - Instagram (Instagram ++)
   - Snapchat (Snap + for Snapchat)
+  - Facebook (Facebook ++)
 
 How-To:
   - Download Xcode from the app store (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
