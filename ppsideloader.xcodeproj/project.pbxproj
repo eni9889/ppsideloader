@@ -119,8 +119,14 @@
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = 9999T6G2M8;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};

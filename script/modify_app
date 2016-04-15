@@ -46,7 +46,8 @@ unzip -oqq "$PP_TWEAK_ZIP_PATH" -d "$WORKING_DIR"
 
 #copy over the app contents
 echo "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
-rm -rf "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"*
+rm -rf "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app" || true
+mkdir -p "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app" || true
 cp -rf "$APP_PATH/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 
 #copy over all the dylibs
@@ -82,10 +83,12 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
         #grab the plugin exe name
         echo "PLUGIN: $PLUGIN"
 
+        #if we don't care about push we can install it as an additional app
+        PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
+        echo "PLUGIN_ID: $PLUGIN_ID"
+
         if [ "$ENABLE_PUSH" != true ] ; then
             echo 'PUSH IS NOT ENABLED'
-                    #if we don't care about push we can install it as an additional app
-            PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
             
             echo "SUB $HOOKED_APP_BUNDLE_ID WITH $PRODUCT_BUNDLE_IDENTIFIER IN $PLUGIN_ID"
             NEW_PLUGIN_ID=${PLUGIN_ID/$HOOKED_APP_BUNDLE_ID/$PRODUCT_BUNDLE_IDENTIFIER}
