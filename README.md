@@ -32,7 +32,7 @@ How-To:
   - ***Please note that if this is the first time you are building the app, on your phone go to Settings -> General -> Devices and Trust the new profile***
 
 Known Limitations:
-  - YouTube sign in is not currently working
+  - ~~YouTube sign in is not currently working~~ FIXED!
   - Snapchat share extension is not currently working
 
 Let me know if this works for you at http://twitter.com/unlimapps
