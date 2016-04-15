@@ -1,4 +1,10 @@
-#export
+export
+
+#PRODUCT_SETTINGS_PATH
+ENABLE_PUSH=$(/usr/libexec/PlistBuddy -c "Print PP_SL_PUSH_NOTIFICATIONS"  "$PRODUCT_SETTINGS_PATH")
+echo "ENABLE_PUSH: $ENABLE_PUSH"
+
+
 
 #define some common paths
 TEMP_PATH="${SRCROOT}/temp"
@@ -49,6 +55,11 @@ cp -rf "$WORKING_DIR/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 #change the display name to ++
 /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $HOOKED_APP_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 
+if [ "$ENABLE_PUSH" != true ] ; then
+    echo 'PUSH IS NOT ENABLED'
+    /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+fi
+
 #add the dylib
 "${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/pptweak.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
@@ -70,6 +81,19 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
     do
         #grab the plugin exe name
         echo "PLUGIN: $PLUGIN"
+
+        if [ "$ENABLE_PUSH" != true ] ; then
+            echo 'PUSH IS NOT ENABLED'
+                    #if we don't care about push we can install it as an additional app
+            PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
+            
+            echo "SUB $HOOKED_APP_BUNDLE_ID WITH $PRODUCT_BUNDLE_IDENTIFIER IN $PLUGIN_ID"
+            NEW_PLUGIN_ID=${PLUGIN_ID/$HOOKED_APP_BUNDLE_ID/$PRODUCT_BUNDLE_IDENTIFIER}
+
+            #change the plugin id
+            /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $NEW_PLUGIN_ID" "$PLUGIN/Info.plist"
+        fi
+
         PLUGIN_EXE=$PLUGIN/$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$PLUGIN/Info.plist")
         echo "PLUGIN_EXE: $PLUGIN_EXE"
 
