@@ -1,4 +1,4 @@
-export
+#export
 
 #PRODUCT_SETTINGS_PATH
 PP_CONFIG_PATH="$SOURCE_ROOT/PP_SIDELOADER_OPTIONS.plist"
@@ -56,12 +56,20 @@ cp -rf "$APP_PATH/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 #copy over all the dylibs
 cp -rf "$WORKING_DIR/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 
+#lets make sure the HOOKED_EXE has correct permissions
+if ! [[ -x "$HOOKED_EXE_PATH" ]]
+then
+    echo "EXE NOT EXECUTABLE SO CHANGING PERMISSIONS"
+    chmod +x "$HOOKED_EXE_PATH"
+else
+    echo "EXE IS EXECUTABLE"
+fi
+
 #change the display name to ++
 if [ "$KEEP_ORIGINAL_APP_NAME" != true ] ; then
     echo 'KEEP_ORIGINAL_APP_NAME IS NOT ENABLED'
     /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $HOOKED_APP_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 fi
-
 
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
     echo 'PUSH IS NOT ENABLED'
@@ -106,6 +114,15 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
 
         PLUGIN_EXE=$PLUGIN/$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$PLUGIN/Info.plist")
         echo "PLUGIN_EXE: $PLUGIN_EXE"
+
+        #lets make sure the plugin has correct permissions
+        if ! [[ -x "$PLUGIN_EXE" ]]
+        then
+            echo "PLUGIN_EXE NOT EXECUTABLE SO CHANGING PERMISSIONS"
+            chmod +x "$PLUGIN_EXE"
+        else
+            echo "PLUGIN_EXE IS EXECUTABLE"
+        fi
 
         #sign the extension
         /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE"
