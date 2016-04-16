@@ -1,10 +1,13 @@
 export
 
 #PRODUCT_SETTINGS_PATH
-ENABLE_PUSH=$(/usr/libexec/PlistBuddy -c "Print PP_SL_PUSH_NOTIFICATIONS"  "$PRODUCT_SETTINGS_PATH")
-echo "ENABLE_PUSH: $ENABLE_PUSH"
+PP_CONFIG_PATH="$SOURCE_ROOT/PP_SIDELOADER_OPTIONS.plist"
 
+OVERWRITE_ORIGINAL_APP=$(/usr/libexec/PlistBuddy -c "Print OVERWRITE_ORIGINAL_APP" "$PP_CONFIG_PATH")
+echo "OVERWRITE_ORIGINAL_APP: $OVERWRITE_ORIGINAL_APP"
 
+KEEP_ORIGINAL_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print KEEP_ORIGINAL_APP_NAME" "$PP_CONFIG_PATH")
+echo "KEEP_ORIGINAL_APP_NAME: $KEEP_ORIGINAL_APP_NAME"
 
 #define some common paths
 TEMP_PATH="${SRCROOT}/temp"
@@ -54,9 +57,13 @@ cp -rf "$APP_PATH/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 cp -rf "$WORKING_DIR/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 
 #change the display name to ++
-/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $HOOKED_APP_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+if [ "$KEEP_ORIGINAL_APP_NAME" != true ] ; then
+    echo 'KEEP_ORIGINAL_APP_NAME IS NOT ENABLED'
+    /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $HOOKED_APP_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+fi
 
-if [ "$ENABLE_PUSH" != true ] ; then
+
+if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
     echo 'PUSH IS NOT ENABLED'
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 fi
@@ -87,7 +94,7 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
         PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
         echo "PLUGIN_ID: $PLUGIN_ID"
 
-        if [ "$ENABLE_PUSH" != true ] ; then
+        if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
             echo 'PUSH IS NOT ENABLED'
             
             echo "SUB $HOOKED_APP_BUNDLE_ID WITH $PRODUCT_BUNDLE_IDENTIFIER IN $PLUGIN_ID"

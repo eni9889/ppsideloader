@@ -11,6 +11,7 @@
 		472ADDC61CC04250007D628E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 472ADDC51CC04250007D628E /* Info.plist */; };
 		472ADDC91CC04272007D628E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 472ADDC81CC04272007D628E /* AppDelegate.m */; };
 		472ADDCD1CC04291007D628E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 472ADDCC1CC04291007D628E /* ViewController.m */; };
+		47F81AFB1CC1F03200460314 /* PP_SIDELOADER_OPTIONS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47F81AFA1CC1F03200460314 /* PP_SIDELOADER_OPTIONS.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		472ADDCC1CC04291007D628E /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ppsideloader/ViewController.m; sourceTree = SOURCE_ROOT; };
 		4741EE651CBDFF09008F9CDF /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = SOURCE_ROOT; };
 		478649241CBE7D790090A40A /* modify_app */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; name = modify_app; path = script/modify_app; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
+		47F81AFA1CC1F03200460314 /* PP_SIDELOADER_OPTIONS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PP_SIDELOADER_OPTIONS.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				478649241CBE7D790090A40A /* modify_app */,
+				47F81AFA1CC1F03200460314 /* PP_SIDELOADER_OPTIONS.plist */,
 				4741EE651CBDFF09008F9CDF /* app.entitlements */,
 				24208ADF1BCDE89E00D78C93 /* Supporting Files */,
 			);
@@ -156,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				472ADDC61CC04250007D628E /* Info.plist in Resources */,
+				47F81AFB1CC1F03200460314 /* PP_SIDELOADER_OPTIONS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

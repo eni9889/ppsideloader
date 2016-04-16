@@ -69,8 +69,6 @@
 	<string>7.0</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>ppsideloaderneeds to know your location to figure out sunrise and sunset times</string>
-	<key>PP_SL_PUSH_NOTIFICATIONS</key>
-	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
