@@ -9,7 +9,7 @@ Supported Apps/Tweaks:
   - Facebook (Facebook ++)
 
 How-To:
-  - Download Xcode from the app store (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
+  - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
   - Connect your computer with your iPhone using your cable
   - Open Xcode
   - Navigate to Xcode -> Preferences -> Accounts
