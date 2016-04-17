@@ -129,6 +129,18 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
     done
 fi
 
+APP_FRAMEWORKS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks"
+if [ -d "$APP_FRAMEWORKS_PATH" ]; then
+for FRAMEWORK in "$APP_FRAMEWORKS_PATH/"*
+do
+    #grab the framework name
+    echo "FRAMEWORK: $FRAMEWORK"
+
+    #sign the FRAMEWORK
+    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK"
+done
+fi
+
 #make sure to add entitlements to the original app binary
 /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" --entitlements "$REAL_CODE_SIGN_ENTITLEMENTS" --timestamp=none "$HOOKED_EXE_PATH"
 
