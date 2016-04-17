@@ -1,0 +1,50 @@
+TEMP_PATH="$SOURCE_ROOT/temp"
+WORKING_DIR="${SRCROOT}/working_dir"
+EXTRACTED_IPA_PATH="$TEMP_PATH/EXTRACTED_IPA"
+LOG_FILE="$TEMP/build.log"
+PRODUCTS_CONTAINER="$SOURCE_ROOT/products"
+
+mkdir -p "$TEMP"
+echo "DONE BUILDING" >> "$LOG_FILE"
+
+#find the .app path
+APP_PATH="$(set -- $EXTRACTED_IPA_PATH/Payload/*.app; echo "$1")"
+echo "FOUND APP PATH: $APP_PATH"
+
+HOOKED_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName"  "$APP_PATH/Info.plist")
+echo "HOOKED_APP_NAME: $HOOKED_APP_NAME"
+APP_IPA_FOLDER="$PRODUCTS_CONTAINER/$HOOKED_APP_NAME"
+
+#PRODUCT_SETTINGS_PATH
+PP_CONFIG_PATH="$SOURCE_ROOT/PP_SIDELOADER_OPTIONS.plist"
+echo "PP_CONFIG_PATH: $PP_CONFIG_PATH" >> "$LOG_FILE"
+
+CREATE_IPA_FILES=$(/usr/libexec/PlistBuddy -c "Print CREATE_IPA_FILES" "$PP_CONFIG_PATH")
+echo "CREATE_IPA_FILES: $CREATE_IPA_FILES" >> "$LOG_FILE"
+
+if [ "$CREATE_IPA_FILES" = true ] ; then
+
+	#lets clear out IPA folder if one exists
+	rm -rf "$APP_IPA_FOLDER" || true
+
+	#create a new ipa tempalte
+	mkdir -p "$APP_IPA_FOLDER/Payload"
+
+	#copy .app to payload folder
+	cp -rf "$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app" "$APP_IPA_FOLDER/Payload"
+
+	#go into the app folder get ready to zip
+	cd "$APP_IPA_FOLDER"
+
+	#zip contents
+	/usr/bin/zip -r $PRODUCT_NAME.ipa Payload
+	mv $PRODUCT_NAME.ipa "$APP_IPA_FOLDER++.ipa"
+	rm -rf "$APP_IPA_FOLDER"
+
+fi
+
+#cleanup
+rm -rf "$WORKING_DIR" || true
+rm -rf "$TEMP_PATH" || true
+
+exit 0

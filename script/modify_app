@@ -96,7 +96,7 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
     for PLUGIN in "$APP_PLUGINS_PATH/"*.appex
     do
         #grab the plugin exe name
-        echo "PLUGIN: $PLUGIN"
+        #echo "PLUGIN: $PLUGIN"
 
         #if we don't care about push we can install it as an additional app
         PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
@@ -134,7 +134,7 @@ if [ -d "$APP_FRAMEWORKS_PATH" ]; then
 for FRAMEWORK in "$APP_FRAMEWORKS_PATH/"*
 do
     #grab the framework name
-    echo "FRAMEWORK: $FRAMEWORK"
+    #echo "FRAMEWORK: $FRAMEWORK"
 
     #sign the FRAMEWORK
     /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK"
@@ -143,7 +143,3 @@ fi
 
 #make sure to add entitlements to the original app binary
 /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" --entitlements "$REAL_CODE_SIGN_ENTITLEMENTS" --timestamp=none "$HOOKED_EXE_PATH"
-
-#cleanup
-rm -rf "$WORKING_DIR" || true
-rm -rf "$TEMP_PATH" || true

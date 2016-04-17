@@ -6,5 +6,7 @@
 	<false/>
 	<key>OVERWRITE_ORIGINAL_APP</key>
 	<true/>
+	<key>CREATE_IPA_FILES</key>
+	<true/>
 </dict>
 </plist>

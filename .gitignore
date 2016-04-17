@@ -27,3 +27,4 @@ DerivedData
 #ignore temp dirs
 working_dir
 temp
+build.log
