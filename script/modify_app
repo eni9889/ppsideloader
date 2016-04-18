@@ -86,12 +86,18 @@ security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROV
 /usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
 
 #sign all the executable binaries
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib"
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib"
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib"
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib"
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib" > /dev/null
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib" > /dev/null
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib" > /dev/null
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib" > /dev/null
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
+if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
+    echo 'PUSH IS NOT ENABLED'
+    #plugins cant be used on duplicate so lets just delete them
+    rm -rf "$APP_PLUGINS_PATH" || true
+fi
+
 if [ -d "$APP_PLUGINS_PATH" ]; then
     for PLUGIN in "$APP_PLUGINS_PATH/"*.appex
     do
@@ -101,16 +107,6 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
         #if we don't care about push we can install it as an additional app
         PLUGIN_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN/Info.plist")
         echo "PLUGIN_ID: $PLUGIN_ID"
-
-        if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
-            echo 'PUSH IS NOT ENABLED'
-            
-            echo "SUB $HOOKED_APP_BUNDLE_ID WITH $PRODUCT_BUNDLE_IDENTIFIER IN $PLUGIN_ID"
-            NEW_PLUGIN_ID=${PLUGIN_ID/$HOOKED_APP_BUNDLE_ID/$PRODUCT_BUNDLE_IDENTIFIER}
-
-            #change the plugin id
-            /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $NEW_PLUGIN_ID" "$PLUGIN/Info.plist"
-        fi
 
         PLUGIN_EXE=$PLUGIN/$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$PLUGIN/Info.plist")
         echo "PLUGIN_EXE: $PLUGIN_EXE"
@@ -125,7 +121,30 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
         fi
 
         #sign the extension
-        /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE"
+        /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE" > /dev/null
+
+        #we also need to sign and update the plist of any app inside the plugin
+        for PLUGIN_APP in "$PLUGIN/"*.app
+        do
+            echo "PLUGIN_APP: $PLUGIN_APP"
+            if [ -d "$PLUGIN_APP" ]; then
+                PLUGIN_APP_EXE=$PLUGIN_APP/$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$PLUGIN_APP/Info.plist")
+                echo "PLUGIN_APP_EXE: $PLUGIN_APP_EXE"
+
+                #lets make sure the plugin has correct permissions
+                if ! [[ -x "$PLUGIN_APP_EXE" ]]
+                then
+                    echo "PLUGIN_APP_EXE NOT EXECUTABLE SO CHANGING PERMISSIONS"
+                    chmod +x "$PLUGIN_APP_EXE"
+                else
+                    echo "PLUGIN_APP_EXE IS EXECUTABLE"
+                fi
+
+                #sign the extension
+                /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_APP_EXE" > /dev/null
+            fi
+        done
+
     done
 fi
 
@@ -133,11 +152,8 @@ APP_FRAMEWORKS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks"
 if [ -d "$APP_FRAMEWORKS_PATH" ]; then
 for FRAMEWORK in "$APP_FRAMEWORKS_PATH/"*
 do
-    #grab the framework name
-    #echo "FRAMEWORK: $FRAMEWORK"
-
     #sign the FRAMEWORK
-    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK"
+    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK" > /dev/null
 done
 fi
 
