@@ -86,10 +86,10 @@ security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROV
 /usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
 
 #sign all the executable binaries
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib" > /dev/null
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib" > /dev/null
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib" > /dev/null
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib" > /dev/null
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib" > /dev/null 2>&1
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib" > /dev/null 2>&1
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib" > /dev/null 2>&1
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib" > /dev/null 2>&1
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
@@ -121,7 +121,8 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
         fi
 
         #sign the extension
-        /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE" > /dev/null
+        echo "SIGNING: $PLUGIN_ID"
+        /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_EXE" > /dev/null 2>&1
 
         #we also need to sign and update the plist of any app inside the plugin
         for PLUGIN_APP in "$PLUGIN/"*.app
@@ -140,8 +141,12 @@ if [ -d "$APP_PLUGINS_PATH" ]; then
                     echo "PLUGIN_APP_EXE IS EXECUTABLE"
                 fi
 
+                PLUGIN_APP_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier"  "$PLUGIN_APP/Info.plist")
+                echo "PLUGIN_APP_ID: $PLUGIN_APP_ID"
+
                 #sign the extension
-                /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_APP_EXE" > /dev/null
+                echo "SIGNING: $PLUGIN_APP_ID"
+                /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$PLUGIN_APP_EXE" > /dev/null 2>&1
             fi
         done
 
@@ -153,9 +158,11 @@ if [ -d "$APP_FRAMEWORKS_PATH" ]; then
 for FRAMEWORK in "$APP_FRAMEWORKS_PATH/"*
 do
     #sign the FRAMEWORK
-    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK" > /dev/null
+    echo "SIGNING: $FRAMEWORK"
+    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK" > /dev/null 2>&1
 done
 fi
 
 #make sure to add entitlements to the original app binary
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" --entitlements "$REAL_CODE_SIGN_ENTITLEMENTS" --timestamp=none "$HOOKED_EXE_PATH"
+echo "SIGNING: FINAL BINARY"
+/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" --entitlements "$REAL_CODE_SIGN_ENTITLEMENTS" --timestamp=none "$HOOKED_EXE_PATH" > /dev/null 2>&1
