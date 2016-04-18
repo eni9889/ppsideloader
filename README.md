@@ -7,6 +7,8 @@ Supported Apps/Tweaks:
   - Instagram (Instagram ++)
   - Snapchat (Snap + for Snapchat)
   - Facebook (Facebook ++)
+  - WhatsApp ++
+  - Twitter ++
 
 How-To:
   - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
