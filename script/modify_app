@@ -86,10 +86,12 @@ security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROV
 /usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
 
 #sign all the executable binaries
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib" > /dev/null 2>&1
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib" > /dev/null 2>&1
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib" > /dev/null 2>&1
-/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweak.dylib" > /dev/null 2>&1
+for DYLIB in "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"*.dylib
+do
+    FILENAME=$(basename $DYLIB)
+    echo "SIGNING: $FILENAME"
+    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$DYLIB" > /dev/null 2>&1
+done
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
@@ -158,7 +160,9 @@ if [ -d "$APP_FRAMEWORKS_PATH" ]; then
 for FRAMEWORK in "$APP_FRAMEWORKS_PATH/"*
 do
     #sign the FRAMEWORK
-    echo "SIGNING: $FRAMEWORK"
+    FILENAME=$(basename $FRAMEWORK)
+    echo "SIGNING: $FILENAME"
+
     /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$FRAMEWORK" > /dev/null 2>&1
 done
 fi
