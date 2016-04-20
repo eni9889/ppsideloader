@@ -44,7 +44,7 @@ if [ "$CREATE_IPA_FILES" = true ] ; then
 fi
 
 #cleanup
-rm -rf "$WORKING_DIR" || true
+#rm -rf "$WORKING_DIR" || true
 rm -rf "$TEMP_PATH" || true
 
 exit 0

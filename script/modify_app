@@ -15,7 +15,7 @@ WORKING_DIR="${SRCROOT}/working_dir"
 EXTRACTED_IPA_PATH="$TEMP_PATH/EXTRACTED_IPA"
 
 rm -rf "$TEMP_PATH" || true
-rm -rf "$WORKING_DIR" || true
+#rm -rf "$WORKING_DIR" || true
 
 mkdir -p "$TEMP_PATH" || true
 mkdir -p "$WORKING_DIR" || true
@@ -41,11 +41,7 @@ HOOKED_EXE_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 #lets download the pp tweak for the app located in root
 echo "DOWNLOADING PP TWEAK"
 PP_TWEAK_ZIP_PATH="$TEMP_PATH/pptweak.zip"
-curl -L "https://beta.unlimapps.com/ppsideloaded/$HOOKED_APP_BUNDLE_ID" -o "$PP_TWEAK_ZIP_PATH"
-
-#now we can unzip the tweak into working directory
-echo "EXTRACTING PP TWEAK"
-unzip -oqq "$PP_TWEAK_ZIP_PATH" -d "$WORKING_DIR"
+#curl -L "https://beta.unlimapps.com/ppsideloaded/$HOOKED_APP_BUNDLE_ID" -o "$PP_TWEAK_ZIP_PATH"
 
 #copy over the app contents
 echo "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
@@ -55,6 +51,12 @@ cp -rf "$APP_PATH/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
 
 #copy over all the dylibs
 cp -rf "$WORKING_DIR/" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"
+
+#now we can unzip the tweak into working directory
+echo "EXTRACTING PP TWEAK"
+mkdir -p "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks"
+#unzip -oqq "$PP_TWEAK_ZIP_PATH" -d "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks"
+cp -rf "${SRCROOT}/working_dir/"* "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks/"
 
 #lets make sure the HOOKED_EXE has correct permissions
 if ! [[ -x "$HOOKED_EXE_PATH" ]]
@@ -77,7 +79,9 @@ if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
 fi
 
 #add the dylib
-"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/pptweak.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
+#"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/libuasharedanaltyics.dylib" "$PP_TWEAK_PATH"
+#"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/libuasharedtools.dylib" "$PP_TWEAK_PATH"
+#"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/pptweak.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
 #add the correct entitlements
 TEMP_PLIST="$TEMP_PATH/temp.plist"
@@ -86,12 +90,28 @@ security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROV
 /usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
 
 #sign all the executable binaries
-for DYLIB in "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"*.dylib
+for DYLIB in "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Frameworks/"*.dylib
 do
-    FILENAME=$(basename $DYLIB)
-    echo "SIGNING: $FILENAME"
-    /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$DYLIB" > /dev/null 2>&1
+    if [ -f $DYLIB ]; then
+        echo "'$DYLIB' Exists"
+        FILENAME=$(basename $DYLIB)
+        echo "SIGNING: $FILENAME"
+        #/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$DYLIB" > /dev/null 2>&1
+        /opt/iOSOpenDev/bin/ldid -S "$DYLIB"
+        "${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/Frameworks/$FILENAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
+    fi
 done
+
+#sign all the executable binaries
+#/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib" > /dev/null 2>&1
+#/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib" > /dev/null 2>&1
+#/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib" > /dev/null 2>&1
+
+#ldid -S "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedtools.dylib"
+#ldid -S "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyicsflurry.dylib"
+#ldid -S "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/libuasharedanaltyics.dylib"
+#/usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/pptweakloader.dylib" > /dev/null 2>&1
+
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
