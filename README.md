@@ -10,6 +10,8 @@ Supported Apps/Tweaks:
   - WhatsApp ++
   - Twitter ++
 
+How-To Video: ***https://youtu.be/SmV4A_p7WWY***
+
 How-To:
   - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
   - Connect your computer with your iPhone using your cable
@@ -33,9 +35,10 @@ How-To:
   - Click the Play button on the top left and the sideloaded app will start building
   - ***Please note that if this is the first time you are building the app, on your phone go to Settings -> General -> Devices and Trust the new profile***
 
-Known Limitations:
-  - ~~YouTube sign in is not currently working~~ FIXED!
-  - Snapchat share extension is not currently working
+Configuration (modify values in PP_SIDELOADER_OPTIONS):
+  - KEEP_ORIGINAL_APP_NAME: Do not add ++ to the installed app name
+  - OVERWRITE_ORIGINAL_APP: If you want push notifications keep this true. If you want to install a duplicate app without push notifications set this to false
+  - CREATE_IPA_FILES: If you set this to true after every build you will see an IPA with ++ in the products directory inside your project folder.
 
 Let me know if this works for you at http://twitter.com/unlimapps
 
