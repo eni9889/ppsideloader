@@ -9,6 +9,7 @@ Supported Apps/Tweaks:
   - Facebook (Facebook ++)
   - WhatsApp ++
   - Twitter ++
+  - Vine ++
 
 Descriptions at http://beta.unlimapps.com/
 
