@@ -2,13 +2,15 @@
 
 This is an Xcode project that will make installing ++ tweaks on a non-jailbroken device super simple. Tested on Xcode 7.3
 
-Supported Apps/Tweaks:
+Supported Apps/Tweaks: 
   - YouTube (YouTube ++)
   - Instagram (Instagram ++)
   - Snapchat (Snap + for Snapchat)
   - Facebook (Facebook ++)
   - WhatsApp ++
   - Twitter ++
+
+Descriptions at http://beta.unlimapps.com/
 
 ***How-To Video:*** https://youtu.be/SmV4A_p7WWY
 
