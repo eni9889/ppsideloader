@@ -13,6 +13,7 @@ Supported Apps/Tweaks:
 Descriptions at http://beta.unlimapps.com/
 
 ***How-To Video:*** https://youtu.be/SmV4A_p7WWY
+***For Help Visit:*** https://www.reddit.com/r/sideloaded
 
 How-To:
   - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
