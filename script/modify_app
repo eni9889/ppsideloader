@@ -25,7 +25,7 @@ echo "EXTRACTING IPA"
 unzip -oqq "${SRCROOT}/app.ipa" -d "$EXTRACTED_IPA_PATH"
 
 #find the .app path
-APP_PATH="$(set -- $EXTRACTED_IPA_PATH/Payload/*.app; echo "$1")"
+APP_PATH=$(set -- "$EXTRACTED_IPA_PATH/Payload/"*.app; echo "$1")
 echo "FOUND APP PATH: $APP_PATH"
 
 #define some common variables
