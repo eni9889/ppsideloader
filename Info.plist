@@ -68,7 +68,7 @@
 	<key>MinimumOSVersion</key>
 	<string>7.0</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>ppsideloaderneeds to know your location to figure out sunrise and sunset times</string>
+	<string>ppsideloader needs to know your location to figure out sunrise and sunset times</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
