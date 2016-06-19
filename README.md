@@ -2,6 +2,8 @@
 
 This is an Xcode project that will make installing ++ tweaks on a non-jailbroken device super simple. Tested on Xcode 7.3
 
+***Please note that in iOS 10 push notifications no longer work for some people :(. Follow the directions here for a workaround: http://www.twitlonger.com/show/n_1soqbs5***
+
 ***Please note that now apple expires certificates in 7 days for free developer account*** - https://www.reddit.com/r/jailbreak/comments/4hotx3/news_free_developer_account_installs_reduced_to_7/
 
 Supported Apps/Tweaks: 
