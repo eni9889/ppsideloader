@@ -23,6 +23,7 @@ Descriptions at http://beta.unlimapps.com/
 
 How-To:
   - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
+    (If you have iOS 10 you will need Xcode 8 beta, unfortunately cannot give link here, legal reasons)
   - Connect your computer with your iPhone using your cable
   - Open Xcode
   - Navigate to Xcode -> Preferences -> Accounts
