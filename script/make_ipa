@@ -8,7 +8,7 @@ mkdir -p "$TEMP"
 echo "DONE BUILDING" >> "$LOG_FILE"
 
 #find the .app path
-APP_PATH="$(set -- $EXTRACTED_IPA_PATH/Payload/*.app; echo "$1")"
+APP_PATH=$(set -- "$EXTRACTED_IPA_PATH/Payload/"*.app; echo "$1")
 echo "FOUND APP PATH: $APP_PATH"
 
 HOOKED_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName"  "$APP_PATH/Info.plist")
