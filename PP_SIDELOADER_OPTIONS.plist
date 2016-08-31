@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>KEEP_ORIGINAL_APP_NAME</key>
-	<false/>
+	<true/>
 	<key>OVERWRITE_ORIGINAL_APP</key>
 	<true/>
 	<key>CREATE_IPA_FILES</key>
