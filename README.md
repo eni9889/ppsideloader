@@ -51,6 +51,9 @@ Configuration (modify values in PP_SIDELOADER_OPTIONS):
   - ***OVERWRITE_ORIGINAL_APP:*** If you want push notifications keep this true. If you want to install a duplicate app without push notifications set this to false
   - ***CREATE_IPA_FILES:*** If you set this to true after every build you will see an IPA with ++ in the products directory inside your project folder.
 
+Note on YT ++ Ad Block
+  - Change the bundle id of the YouTube IPA that you load into ppsideloader fron `com.google.ios.youtube` -> `com.google.ios.youtube.noads`
+
 Let me know if this works for you at http://twitter.com/unlimapps
 
 Credits:
