@@ -8,5 +8,7 @@
 	<true/>
 	<key>CREATE_IPA_FILES</key>
 	<false/>
+	<key>REMOVE_PLUGINS</key>
+	<false/>
 </dict>
 </plist>
