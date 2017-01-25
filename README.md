@@ -46,6 +46,9 @@ How-To:
   - Click the Play button on the top left and the sideloaded app will start building
   - ***Please note that if this is the first time you are building the app, on your phone go to Settings -> General -> Devices and Trust the new profile***
 
+Loading other tweaks:
+  - Place a zip file named `pptweak.zip` at the root of the ppsideloader project alongside the `app.ipa` file. This zip file must be 1 level deep. Its contents will be copied into the app's bundle and any `dylibs` will be signed
+
 Configuration (modify values in PP_SIDELOADER_OPTIONS):
   - ***KEEP_ORIGINAL_APP_NAME:*** Do not add ++ to the installed app name
   - ***OVERWRITE_ORIGINAL_APP:*** If you want push notifications keep this true. If you want to install a duplicate app without push notifications set this to false
