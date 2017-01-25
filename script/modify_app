@@ -3,6 +3,8 @@
 #PRODUCT_SETTINGS_PATH
 PP_CONFIG_PATH="$SOURCE_ROOT/PP_SIDELOADER_OPTIONS.plist"
 
+PP_EXTERNAL_TWEAK_PATH="$SOURCE_ROOT/pptweak.zip"
+
 OVERWRITE_ORIGINAL_APP=$(/usr/libexec/PlistBuddy -c "Print OVERWRITE_ORIGINAL_APP" "$PP_CONFIG_PATH")
 echo "OVERWRITE_ORIGINAL_APP: $OVERWRITE_ORIGINAL_APP"
 
@@ -41,10 +43,16 @@ HOOKED_APP_NAME="$HOOKED_APP_NAME ++"
 HOOKED_EXECUTABLE=$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$APP_PATH/Info.plist")
 HOOKED_EXE_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
-#lets download the pp tweak for the app located in root
-echo "DOWNLOADING PP TWEAK"
 PP_TWEAK_ZIP_PATH="$TEMP_PATH/pptweak.zip"
-curl -L "https://beta.unlimapps.com/ppsideloaded/$HOOKED_APP_BUNDLE_ID" -o "$PP_TWEAK_ZIP_PATH"
+if [ -f $PP_EXTERNAL_TWEAK_PATH ]; then
+    echo "USING PPTWEAK AT $PP_EXTERNAL_TWEAK_PATH"
+    cp "$PP_EXTERNAL_TWEAK_PATH" "$PP_TWEAK_ZIP_PATH"
+else
+    echo "DOWNLOADING PPTWEAK FROM UNLIMAPPS"
+    #lets download the pp tweak for the app located in root
+    echo "DOWNLOADING PP TWEAK"
+    curl -L "https://beta.unlimapps.com/ppsideloaded/$HOOKED_APP_BUNDLE_ID" -o "$PP_TWEAK_ZIP_PATH"
+fi
 
 #now we can unzip the tweak into working directory
 echo "EXTRACTING PP TWEAK"
