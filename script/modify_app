@@ -9,6 +9,9 @@ echo "OVERWRITE_ORIGINAL_APP: $OVERWRITE_ORIGINAL_APP"
 KEEP_ORIGINAL_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print KEEP_ORIGINAL_APP_NAME" "$PP_CONFIG_PATH")
 echo "KEEP_ORIGINAL_APP_NAME: $KEEP_ORIGINAL_APP_NAME"
 
+REMOVE_PLUGINS=$(/usr/libexec/PlistBuddy -c "Print REMOVE_PLUGINS" "$PP_CONFIG_PATH")
+echo "REMOVE_PLUGINS: $REMOVE_PLUGINS"
+
 #define some common paths
 TEMP_PATH="${SRCROOT}/temp"
 WORKING_DIR="${SRCROOT}/working_dir"
@@ -94,8 +97,8 @@ do
 done
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
-if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
-    echo 'PUSH IS NOT ENABLED'
+if [ "$OVERWRITE_ORIGINAL_APP" != true ] || [ "$REMOVE_PLUGINS" == true ] ; then
+    echo 'REMOVING IPA PLUGINS'
     #plugins cant be used on duplicate so lets just delete them
     rm -rf "$APP_PLUGINS_PATH" || true
 fi
