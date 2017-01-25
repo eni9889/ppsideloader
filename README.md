@@ -6,7 +6,7 @@ This is an Xcode project that will make installing ++ tweaks on a non-jailbroken
 
 ***Please note that now apple expires certificates in 7 days for free developer account*** - https://www.reddit.com/r/jailbreak/comments/4hotx3/news_free_developer_account_installs_reduced_to_7/
 
-Supported Apps/Tweaks: 
+Supported Apps/Tweaks:
   - Poke Go ++ for Pokemon Go (MAKE SURE TO SET KEEP_ORIGINAL_APP_NAME TO `YES` FOR THIS TWEAK)
   - YouTube (YouTube ++)
   - Instagram (Instagram ++)
@@ -50,9 +50,11 @@ Configuration (modify values in PP_SIDELOADER_OPTIONS):
   - ***KEEP_ORIGINAL_APP_NAME:*** Do not add ++ to the installed app name
   - ***OVERWRITE_ORIGINAL_APP:*** If you want push notifications keep this true. If you want to install a duplicate app without push notifications set this to false
   - ***CREATE_IPA_FILES:*** If you set this to true after every build you will see an IPA with ++ in the products directory inside your project folder.
+  - ***REMOVE_PLUGINS:*** Remove all app plugins which might be causing build errors.
 
 Note on YT ++ Ad Block
-  - Change the bundle id of the YouTube IPA that you load into ppsideloader fron `com.google.ios.youtube` -> `com.google.ios.youtube.noads`
+  - Change the bundle id of the YouTube IPA that you load into ppsideloader from `com.google.ios.youtube` -> `com.google.ios.youtube.noads`
+  - Change the `REMOVE_PLUGINS` setting to `YES`
 
 Let me know if this works for you at http://twitter.com/unlimapps
 
