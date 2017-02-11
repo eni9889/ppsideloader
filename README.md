@@ -18,7 +18,7 @@ Supported Apps/Tweaks:
 
 Descriptions at http://beta.unlimapps.com/
 
-***How-To Video:*** https://youtu.be/SmV4A_p7WWY
+***How-To Video:*** https://www.youtube.com/watch?v=8B1V2-PCjyo
 
 ***For Help Visit:*** https://www.reddit.com/r/sideloaded
 
