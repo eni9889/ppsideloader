@@ -10,5 +10,7 @@
 	<false/>
 	<key>REMOVE_PLUGINS</key>
 	<false/>
+	<key>NAME_TWEAK_MS</key>
+	<false/>
 </dict>
 </plist>

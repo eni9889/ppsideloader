@@ -14,6 +14,9 @@ echo "KEEP_ORIGINAL_APP_NAME: $KEEP_ORIGINAL_APP_NAME"
 REMOVE_PLUGINS=$(/usr/libexec/PlistBuddy -c "Print REMOVE_PLUGINS" "$PP_CONFIG_PATH")
 echo "REMOVE_PLUGINS: $REMOVE_PLUGINS"
 
+NAME_TWEAK_MS=$(/usr/libexec/PlistBuddy -c "Print NAME_TWEAK_MS" "$PP_CONFIG_PATH")
+echo "NAME_TWEAK_MS: $NAME_TWEAK_MS"
+
 #define some common paths
 TEMP_PATH="${SRCROOT}/temp"
 WORKING_DIR="${SRCROOT}/working_dir"
@@ -87,8 +90,19 @@ if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 fi
 
-#add the dylib
-"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/pptweak.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
+#add the dylibmv
+if [ "$NAME_TWEAK_MS" != true ] ; then
+    RANDOM_TEXT=$(openssl rand -hex 12)
+    TWEAK_NAME="$RANDOM_TEXT.dylib"
+else
+    TWEAK_NAME="MobileSubstrate.dylib"
+fi
+echo "TWEAK NAME: $TWEAK_NAME"
+
+PP_MS_TWEAK_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$TWEAK_NAME"
+mv $PP_TWEAK_PATH $PP_MS_TWEAK_PATH
+
+"${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/$TWEAK_NAME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
 #add the correct entitlements
 TEMP_PLIST="$TEMP_PATH/temp.plist"
