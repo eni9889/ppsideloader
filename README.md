@@ -11,6 +11,7 @@ Supported Apps/Tweaks:
   - YouTube (YouTube ++)
   - Instagram (Instagram ++)
   - Snapchat (Snap + for Snapchat)
+    - If you are having issues try setting `NAME_TWEAK_MS` to true
   - Facebook (Facebook ++)
   - WhatsApp ++
   - Twitter ++
