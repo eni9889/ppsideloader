@@ -60,10 +60,6 @@ Configuration (modify values in PP_SIDELOADER_OPTIONS):
   - ***CREATE_IPA_FILES:*** If you set this to true after every build you will see an IPA with ++ in the products directory inside your project folder.
   - ***REMOVE_PLUGINS:*** Remove all app plugins which might be causing build errors.
 
-Note on YT ++ Ad Block
-  - Change the bundle id of the YouTube IPA that you load into ppsideloader from `com.google.ios.youtube` -> `com.google.ios.youtube.noads`
-  - Change the `REMOVE_PLUGINS` setting to `YES`
-
 Let me know if this works for you at http://twitter.com/unlimapps
 
 Credits:
