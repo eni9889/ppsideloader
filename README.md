@@ -19,6 +19,9 @@ Supported Apps/Tweaks:
 
 Descriptions at http://beta.unlimapps.com/
 
+***Note on Snap +***
+ - Set `OVERWRITE_ORIGINAL_APP` AND `KEEP_ORIGINAL_APP_NAME` to `YES`
+
 ***How-To Video:*** https://youtu.be/WqY5CmAQST0?t=194
 
 ***For Help Visit:*** https://www.reddit.com/r/sideloaded
