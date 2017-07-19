@@ -6,7 +6,7 @@ This is an Xcode project that will make installing ++ tweaks on a non-jailbroken
 
 ***Please note that now apple expires certificates in 7 days for free developer account*** - https://www.reddit.com/r/jailbreak/comments/4hotx3/news_free_developer_account_installs_reduced_to_7/
 
-Supported Apps/Tweaks:
+***Supported Apps/Tweaks:***
   - Poke Go ++ for Pokemon Go (MAKE SURE TO SET KEEP_ORIGINAL_APP_NAME TO `YES` FOR THIS TWEAK)
   - YouTube (YouTube ++)
   - Instagram (Instagram ++)
@@ -27,7 +27,7 @@ Descriptions at http://beta.unlimapps.com/
 
 ***For Help Visit:*** https://www.reddit.com/r/sideloaded
 
-How-To:
+***How-To:***
   - Download Xcode from the Mac app store onto you Mac (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
     (If you have iOS 10 you will need Xcode 8 beta, unfortunately cannot give link here, legal reasons)
   - Connect your computer with your iPhone using your cable
@@ -51,10 +51,10 @@ How-To:
   - Click the Play button on the top left and the sideloaded app will start building
   - ***Please note that if this is the first time you are building the app, on your phone go to Settings -> General -> Devices and Trust the new profile***
 
-Loading other tweaks:
+***Loading other tweaks:***
   - Place a zip file named `pptweak.zip` at the root of the ppsideloader project alongside the `app.ipa` file. This zip file must be 1 level deep. Its contents will be copied into the app's bundle and any `dylibs` will be signed
 
-Configuration (modify values in PP_SIDELOADER_OPTIONS):
+***Configuration (modify values in PP_SIDELOADER_OPTIONS):***
   - ***KEEP_ORIGINAL_APP_NAME:*** Do not add ++ to the installed app name
   - ***OVERWRITE_ORIGINAL_APP:*** If you want push notifications keep this true. If you want to install a duplicate app without push notifications set this to false
   - ***CREATE_IPA_FILES:*** If you set this to true after every build you will see an IPA with ++ in the products directory inside your project folder.
@@ -62,5 +62,5 @@ Configuration (modify values in PP_SIDELOADER_OPTIONS):
 
 Let me know if this works for you at http://twitter.com/unlimapps
 
-Credits:
+***Credits:***
   This project was inspired by work that https://twitter.com/dvfying did on https://github.com/Defying/TweakPatcher
