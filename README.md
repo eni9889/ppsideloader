@@ -19,10 +19,6 @@ This is an Xcode project that will make installing ++ tweaks on a non-jailbroken
 
 Descriptions at http://beta.unlimapps.com/
 
-***Note on Snap +***
- - Delete the Snapchat you have installed from the App Store
- - Set `OVERWRITE_ORIGINAL_APP` AND `KEEP_ORIGINAL_APP_NAME` to `YES`
-
 ***How-To Video:*** https://youtu.be/WqY5CmAQST0?t=194
 
 ***For Help Visit:*** https://www.reddit.com/r/sideloaded
