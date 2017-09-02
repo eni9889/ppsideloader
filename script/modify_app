@@ -90,6 +90,12 @@ if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 fi
 
+echo "SET TRANSPORT SECURITY TO ALLOW ALL"
+/usr/libexec/PlistBuddy -c "Delete :NSAppTransportSecurity" -c "add :NSAppTransportSecurity dict" -c "add :NSAppTransportSecurity:NSAllowsArbitraryLoads bool true" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+
+echo "SET Music Sharing Description for WhatsApp"
+/usr/libexec/PlistBuddy -c "Delete :NSAppleMusicUsageDescription" -c "add :NSAppleMusicUsageDescription string 'Music Sharing'" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+
 #add the dylibmv
 if [ "$NAME_TWEAK_MS" != true ] ; then
     RANDOM_TEXT=$(openssl rand -hex 12)
