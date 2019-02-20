@@ -7,16 +7,7 @@ This is an Xcode project that will make installing ++ tweaks on a non-jailbroken
 ***Please note that now apple expires certificates in 7 days for free developer account*** - https://www.reddit.com/r/jailbreak/comments/4hotx3/news_free_developer_account_installs_reduced_to_7/
 
 ***Supported Apps/Tweaks:***
-  - Poke Go ++ for Pokemon Go (MAKE SURE TO SET KEEP_ORIGINAL_APP_NAME TO `YES` FOR THIS TWEAK)
-  - Instagram (Instagram ++)
-  - Snapchat (Snap + for Snapchat)
-    - If you are having issues try setting `NAME_TWEAK_MS` to `YES`
-  - Facebook (Facebook ++)
-  - WhatsApp ++
-  - Twitter ++
-  - Vine ++
-
-Descriptions at http://beta.unlimapps.com/
+For a list of supported tweaks please visit https://beta.unlimapps.com/
 
 ***How-To Video:*** https://youtu.be/WqY5CmAQST0?t=194
 
